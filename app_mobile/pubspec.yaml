@@ -120,6 +120,7 @@ flutter:
     - assets/images/logo/
     - assets/images/static_images/avatars/placeholder_avatar/
     - assets/images/static_images/icons/crypto_icons/
+    - assets/images/game_map/
     - .env
 
   #   - images/a_dot_ham.jpeg

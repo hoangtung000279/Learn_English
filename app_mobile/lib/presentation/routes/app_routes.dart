@@ -1,5 +1,6 @@
 // 📦 Package imports:
 import 'package:app_mobile/presentation/pages/dashboard/pages/base.dart';
+import 'package:app_mobile/presentation/pages/game_map/game_map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_mobile/presentation/pages/profile/profile.dart';
@@ -41,7 +42,7 @@ abstract class AcnooAppRoutes {
             // if (state.uri.queryParameters['rtl'] == 'true') {
             //   _appLangProvider.isRTL = true;
             // }
-            return '/dashboard';
+            return '/game_map';
           },
         ),
 
@@ -118,6 +119,12 @@ abstract class AcnooAppRoutes {
           path: '/profile',
           pageBuilder: (context, state) => const NoTransitionPage(
             child: Profile(),
+          ),
+        ),
+        GoRoute(
+          path: '/game_map',
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: GameMapScreen(),
           ),
         ),
       ],
