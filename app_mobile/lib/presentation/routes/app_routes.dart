@@ -1,4 +1,5 @@
 // 📦 Package imports:
+import 'package:app_mobile/presentation/pages/create_quiz/create_quiz_screen.dart';
 import 'package:app_mobile/presentation/pages/dashboard/pages/base.dart';
 import 'package:app_mobile/presentation/pages/game_map/game_map_screen.dart';
 import 'package:app_mobile/presentation/pages/home/home_center.dart';
@@ -139,6 +140,12 @@ abstract class AcnooAppRoutes {
           path: '/leader_board',
           pageBuilder: (context, state) => const NoTransitionPage(
             child: LeaderboardScreen(),
+          ),
+        ),
+        GoRoute(
+          path: '/create_quiz',
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: CreateQuizScreen(),
           ),
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:app_mobile/presentation/pages/game_map/game_map_screen.dart';
+import 'package:app_mobile/presentation/pages/study_recap/study_recap_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app_mobile/presentation/pages/leaderboard/leaderboard_screen.dart';
 
@@ -15,7 +16,7 @@ class _HomeCenterState extends State<HomeCenter> {
   final List<Widget> pages = const [
     GameMapScreen(),
     GameMapScreen(),
-    LeaderboardScreen(),
+    StudyRecapScreen(),
     LeaderboardScreen(),
   ];
 
