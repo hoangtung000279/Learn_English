@@ -1,5 +1,9 @@
 // 📦 Package imports:
+import 'package:app_mobile/presentation/pages/create_quiz/create_quiz_screen.dart';
 import 'package:app_mobile/presentation/pages/dashboard/pages/base.dart';
+import 'package:app_mobile/presentation/pages/game_map/game_map_screen.dart';
+import 'package:app_mobile/presentation/pages/home/home_center.dart';
+import 'package:app_mobile/presentation/pages/leaderboard/leaderboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_mobile/presentation/pages/profile/profile.dart';
@@ -41,7 +45,7 @@ abstract class AcnooAppRoutes {
             // if (state.uri.queryParameters['rtl'] == 'true') {
             //   _appLangProvider.isRTL = true;
             // }
-            return '/dashboard';
+            return '/home_center';
           },
         ),
 
@@ -115,9 +119,33 @@ abstract class AcnooAppRoutes {
           ],
         ),
         GoRoute(
+          path: '/home_center',
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: HomeCenter(),
+          ),
+        ),
+        GoRoute(
           path: '/profile',
           pageBuilder: (context, state) => const NoTransitionPage(
             child: Profile(),
+          ),
+        ),
+        GoRoute(
+          path: '/game_map',
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: GameMapScreen(),
+          ),
+        ),
+        GoRoute(
+          path: '/leader_board',
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: LeaderboardScreen(),
+          ),
+        ),
+        GoRoute(
+          path: '/create_quiz',
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: CreateQuizScreen(),
           ),
         ),
       ],

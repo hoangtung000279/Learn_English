@@ -29,7 +29,7 @@ abstract class AcnooAppTheme {
         interactive: true,
       ),
       outlinedButtonTheme: _getOutlineButtonTheme,
-      scaffoldBackgroundColor: Colors.transparent,
+      scaffoldBackgroundColor: AcnooAppColors.kWhiteColor,
       primaryColor: AcnooAppColors.kPrimary,
       colorScheme: const ColorScheme.light(
         surface: AcnooAppColors.kPrimary50,
@@ -86,7 +86,7 @@ abstract class AcnooAppTheme {
         interactive: true,
       ),
       outlinedButtonTheme: _getOutlineButtonTheme,
-      scaffoldBackgroundColor: Colors.transparent,
+      scaffoldBackgroundColor: AcnooAppColors.kBlackColor,
       primaryColor: AcnooAppColors.kPrimary,
       colorScheme: const ColorScheme.dark(
         surface: AcnooAppColors.kDark1,
