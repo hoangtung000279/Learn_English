@@ -1,260 +1,191 @@
-// import 'package:flutter/foundation.dart';
-// import 'package:app_mobile/application/app_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:feather_icons/feather_icons.dart';
-// import 'package:go_router/go_router.dart';
-// import 'package:app_mobile/application/providers/_user_provider.dart';
-// import 'package:app_mobile/presentation/widgets/loading/overlay_loading.dart';
-// import '../../../generated/l10n.dart' as l;
-// import '../../../domain/helpers/fuctions/helper_functions.dart';
-// import '../../../domain/core/static/static.dart';
-// import '../../widgets/widgets.dart';
+import 'package:app_mobile/provider/auth_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-// class SigninView extends StatefulWidget {
-//   const SigninView({super.key});
+class SignInScreen extends StatelessWidget {
+  const SignInScreen({super.key});
 
-//   @override
-//   State<SigninView> createState() => _SigninViewState();
-// }
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<AuthProvider>();
 
-// class _SigninViewState extends State<SigninView> {
-//   bool rememberMe = false;
-//   bool showPassword = false;
-//   final emailController = TextEditingController();
-//   final passwordController = TextEditingController();
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F6FA),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: Container(
+              width: 420,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Icon(
+                      Icons.lock_outline_rounded,
+                      size: 64,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Center(
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Center(
+                    child: Text(
+                      'Welcome back',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 28),
 
-//   @override
-//   initState() {
-//     AppAuth.logout();
-//     super.initState();
-//     if (kDebugMode) {
-//       emailController.text = 'pfs@gmail.com';
-//       passwordController.text = '12345678';
-//     }
-//   }
+                  const Text(
+                    'Username',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: provider.usernameController,
+                    decoration: InputDecoration(
+                      hintText: 'Enter username',
+                      prefixIcon: const Icon(Icons.person_outline),
+                      filled: true,
+                      fillColor: const Color(0xFFF8F9FD),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
 
-//   @override
-//   dispose() {
-//     emailController.dispose();
-//     passwordController.dispose();
-//     super.dispose();
-//   }
+                  const SizedBox(height: 18),
 
-//   onLogin() async {
-//     FocusManager.instance.primaryFocus?.unfocus();
-//     if (emailController.text.isEmpty || passwordController.text.isEmpty) return;
-//     Loading.show(context);
-//     final result =
-//         await AppAuth.login(emailController.text, passwordController.text);
-//     Loading.hide();
-//     if(!mounted) return;
-//     if (!result) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text('Incorrect login information!')),
-//       );
-//       return;
-//     }
+                  const Text(
+                    'Password',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: provider.passwordController,
+                    obscureText: provider.obscurePassword,
+                    decoration: InputDecoration(
+                      hintText: 'Enter password',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        onPressed: provider.togglePasswordVisibility,
+                        icon: Icon(
+                          provider.obscurePassword
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xFFF8F9FD),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
 
-//     UserProvider.instance.justLogin = true;
-//     context.pushReplacement('/dashboard');
-//   }
+                  if (provider.errorMessage != null) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      provider.errorMessage!,
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final lang = l.S.of(context);
-//     final _theme = Theme.of(context);
-//     final _screenWidth = MediaQuery.sizeOf(context).width;
-//     final _desktopView = _screenWidth >= 1200;
+                  const SizedBox(height: 24),
 
-//     return GestureDetector(
-//       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-//       child: Scaffold(
-//         body: Row(
-//           children: [
-//             Flexible(
-//               child: Container(
-//                 constraints: BoxConstraints(
-//                   minWidth: _desktopView ? (_screenWidth * 0.45) : _screenWidth,
-//                 ),
-//                 decoration: BoxDecoration(
-//                   color: _theme.colorScheme.primaryContainer,
-//                 ),
-//                 child: SafeArea(
-//                   child: Column(
-//                     children: [
-//                       const CompanyHeaderWidget(),
-//                       Flexible(
-//                         child: ConstrainedBox(
-//                           constraints: const BoxConstraints(maxWidth: 375),
-//                           child: Center(
-//                             child: SingleChildScrollView(
-//                               padding: const EdgeInsets.all(16),
-//                               child: Column(
-//                                 mainAxisAlignment: MainAxisAlignment.center,
-//                                 children: [
-//                                   Text(
-//                                     lang.signIn,
-//                                     style: _theme.textTheme.headlineSmall
-//                                         ?.copyWith(
-//                                       fontWeight: FontWeight.w700,
-//                                     ),
-//                                   ),
-//                                   const SizedBox(height: 10),
-//                                   const SizedBox(height: 20),
-//                                   Row(
-//                                     mainAxisAlignment:
-//                                         MainAxisAlignment.spaceAround,
-//                                     children: [
-//                                       Flexible(
-//                                         child: Container(
-//                                           height: 1,
-//                                           color: _theme.colorScheme.outline,
-//                                         ),
-//                                       ),
-//                                       const SizedBox(width: 10),
-//                                       Text(
-//                                         lang.or,
-//                                         style: _theme.textTheme.bodyMedium
-//                                             ?.copyWith(),
-//                                       ),
-//                                       const SizedBox(width: 10),
-//                                       Flexible(
-//                                         child: Container(
-//                                           height: 1,
-//                                           color: _theme.colorScheme.outline,
-//                                         ),
-//                                       )
-//                                     ],
-//                                   ),
-//                                   TextFieldLabelWrapper(
-//                                     labelText: lang.email,
-//                                     inputField: TextFormField(
-//                                       controller: emailController,
-//                                       decoration: InputDecoration(
-//                                         hintText: lang.enterYourEmailAddress,
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: provider.isLoading
+                        ? null
+                        : () async {
+                            final success = await context.read<AuthProvider>().login();
 
-//                                   TextFieldLabelWrapper(
-//                                     labelText: lang.password,
-//                                     inputField: TextFormField(
-//                                       controller: passwordController,
-//                                       obscureText: !showPassword,
-//                                       decoration: InputDecoration(
-//                                         hintText: lang.enterYourPassword,
-//                                         suffixIcon: IconButton(
-//                                           onPressed: () => setState(
-//                                             () => showPassword = !showPassword,
-//                                           ),
-//                                           icon: Icon(
-//                                             showPassword
-//                                                 ? FeatherIcons.eye
-//                                                 : FeatherIcons.eyeOff,
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   const SizedBox(height: 20),
-//                                   const SizedBox(height: 20),
-//                                   SizedBox(
-//                                     width: double.maxFinite,
-//                                     child: ElevatedButton(
-//                                       onPressed: () async {
-//                                         await onLogin();
-//                                       },
-//                                       child: Text(lang.signIn),
-//                                     ),
-//                                   )
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
+                            if (!context.mounted) return;
 
-//             if (_desktopView)
-//               Container(
-//                 constraints: BoxConstraints(
-//                   maxWidth: _screenWidth * 0.55,
-//                   maxHeight: double.maxFinite,
-//                 ),
-//                 decoration: BoxDecoration(
-//                   color: _theme.colorScheme.tertiaryContainer,
-//                 ),
-//                 child: getImageType(
-//                   AcnooStaticImage.signInCover,
-//                   fit: BoxFit.contain,
-//                   height: double.maxFinite,
-//                 ),
-//               ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  success ? 'Đăng nhập thành công' : 'Đăng nhập thất bại',
+                                ),
+                                backgroundColor: success ? Colors.green : Colors.red,
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
 
-// class ForgotPasswordDialog extends StatelessWidget {
-//   const ForgotPasswordDialog({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final _theme = Theme.of(context);
-//     final lang = l.S.of(context);
-//     return GestureDetector(
-//       onTap: () => FocusScope.of(context).unfocus(),
-//       child: Dialog(
-//         insetPadding: const EdgeInsets.all(16),
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-//         child: ConstrainedBox(
-//           constraints: const BoxConstraints(maxWidth: 520),
-//           child: SingleChildScrollView(
-//             padding: const EdgeInsets.fromLTRB(24, 24, 24, 34),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 Text(
-//                   lang.forgotPassword,
-//                   style: _theme.textTheme.headlineMedium?.copyWith(
-//                     fontWeight: FontWeight.w700,
-//                   ),
-//                 ),
-//                 const SizedBox(height: 10),
-//                 Text(
-//                   lang.enterYourEmailWeWillSendYouALinkToResetYourPassword,
-//                   style: _theme.textTheme.bodyLarge?.copyWith(),
-//                   textAlign: TextAlign.center,
-//                 ),
-//                 const SizedBox(height: 24),
-//                 TextFieldLabelWrapper(
-//                   labelText: lang.email,
-//                   inputField: TextFormField(
-//                     decoration: InputDecoration(
-//                       hintText: lang.enterYourEmailAddress,
-//                     ),
-//                   ),
-//                 ),
-//                 const SizedBox(height: 24),
-//                 SizedBox(
-//                   width: double.maxFinite,
-//                   child: ElevatedButton(
-//                     onPressed: () {},
-//                     child: Text(lang.send),
-//                   ),
-//                 )
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+                            if (success) {
+                              context.go('/home_center');
+                            }
+                          },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: provider.isLoading
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.4,
+                              ),
+                            )
+                          : const Text(
+                              'Sign In',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:app_mobile/presentation/routes/app_routes.dart';
+import 'package:app_mobile/provider/auth_provider.dart';
+import 'package:app_mobile/provider/leaderboard_provider.dart';
+import 'package:app_mobile/provider/map_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
@@ -42,6 +45,9 @@ Future<void> main() async {
   final _app = MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => AppProvider()),
+      ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ChangeNotifierProvider(create: (_) => LeaderboardProvider()),
+      ChangeNotifierProvider(create: (_) => MapProvider()),
     ],
     child: const AcnooApp(),
   );

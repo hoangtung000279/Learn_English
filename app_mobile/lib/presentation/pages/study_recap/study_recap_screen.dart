@@ -1,21 +1,26 @@
 import 'package:app_mobile/model/skill_model.dart';
-import 'package:app_mobile/model/user_model.dart';
 import 'package:app_mobile/presentation/pages/study_recap/widgets/profile_card.dart';
 import 'package:app_mobile/presentation/pages/study_recap/widgets/skill_item.dart';
 import 'package:app_mobile/presentation/pages/study_recap/widgets/stat_card.dart';
+import 'package:app_mobile/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class StudyRecapScreen extends StatelessWidget {
   const StudyRecapScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final user = UserModel(
-      name: "Rosy",
-      subtitle: "Keep learning 🔥",
-      avatar: "https://i.pravatar.cc/150",
-    );
+    final user = context.watch<AuthProvider>().currentUser;
+
+    if (user == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text('Chưa có thông tin người dùng'),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xfff5f6fa),
@@ -73,7 +78,6 @@ class StudyRecapScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 20),
-
                     const Text(
                       "Skills",
                       style: TextStyle(
@@ -82,12 +86,11 @@ class StudyRecapScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-
                     ...skills.map((e) => SkillItem(skill: e)),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

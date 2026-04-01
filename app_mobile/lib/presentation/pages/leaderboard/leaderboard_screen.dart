@@ -1,7 +1,9 @@
-import 'package:app_mobile/model/leaderboard_user.dart';
 import 'package:app_mobile/presentation/pages/leaderboard/widgets/leaderboard_list_item.dart';
 import 'package:app_mobile/presentation/pages/leaderboard/widgets/top_three_section.dart';
+import 'package:app_mobile/provider/leaderboard_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
 
@@ -12,12 +14,29 @@ class LeaderboardScreen extends StatefulWidget {
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
   int selectedTab = 0;
   int selectedBottomNav = 2;
-  final List<LeaderboardUser> users = listboardusers;
 
   final List<String> tabs = ['Today', 'Week', 'All Time'];
 
-  List<LeaderboardUser> get topUsers => users.take(3).toList();
-  List<LeaderboardUser> get otherUsers => users.skip(3).toList();
+  String get currentType {
+    switch (selectedTab) {
+      case 0:
+        return 'today';
+      case 1:
+        return 'week';
+      case 2:
+        return 'all_time';
+      default:
+        return 'today';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<LeaderboardProvider>().fetchLeaderboard(type: currentType);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +68,16 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           setState(() {
                             selectedTab = index;
                           });
+
+                          final type = switch (index) {
+                            0 => 'today',
+                            1 => 'week',
+                            _ => 'all_time',
+                          };
+
+                          context
+                              .read<LeaderboardProvider>()
+                              .fetchLeaderboard(type: type);
                         },
                         child: Container(
                           height: 44,
@@ -83,15 +112,51 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
               const SizedBox(height: 28),
 
-              TopThreeSection(users: topUsers),
-
-              const SizedBox(height: 24),
-
               Expanded(
-                child: ListView.builder(
-                  itemCount: otherUsers.length,
-                  itemBuilder: (context, index) {
-                    return LeaderboardListItem(user: otherUsers[index]);
+                child: Consumer<LeaderboardProvider>(
+                  builder: (context, provider, child) {
+                    final users = provider.users;
+                    final topUsers = users.take(3).toList();
+                    final otherUsers = users.skip(3).toList();
+
+                    if (provider.isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (provider.errorMessage != null &&
+                        provider.errorMessage!.isNotEmpty) {
+                      return Center(
+                        child: Text(provider.errorMessage!),
+                      );
+                    }
+
+                    if (users.isEmpty) {
+                      return const Center(
+                        child: Text('No leaderboard data'),
+                      );
+                    }
+
+                    return Column(
+                      children: [
+                        if (topUsers.length >= 3)
+                          TopThreeSection(users: topUsers),
+
+                        if (topUsers.length >= 3) const SizedBox(height: 24),
+
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: otherUsers.length,
+                            itemBuilder: (context, index) {
+                              return LeaderboardListItem(
+                                user: otherUsers[index],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
                   },
                 ),
               ),

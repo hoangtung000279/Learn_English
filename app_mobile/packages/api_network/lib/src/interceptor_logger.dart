@@ -22,7 +22,7 @@ class LoggerInterceptor {
       'baseUrl': response.request?.url,
       'method': response.request?.method,
       'headers': response.request?.headers,
-      'params': response.request?.url.queryParameters,
+      'params': response.request?.url.queryParametersAll,
       //'response_data': jsonDecode(response.body),
     }));
   }

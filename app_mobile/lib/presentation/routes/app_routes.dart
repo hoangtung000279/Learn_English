@@ -4,6 +4,7 @@ import 'package:app_mobile/presentation/pages/dashboard/pages/base.dart';
 import 'package:app_mobile/presentation/pages/game_map/game_map_screen.dart';
 import 'package:app_mobile/presentation/pages/home/home_center.dart';
 import 'package:app_mobile/presentation/pages/leaderboard/leaderboard_screen.dart';
+import 'package:app_mobile/presentation/pages/study_recap/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_mobile/presentation/pages/profile/profile.dart';
@@ -45,7 +46,7 @@ abstract class AcnooAppRoutes {
             // if (state.uri.queryParameters['rtl'] == 'true') {
             //   _appLangProvider.isRTL = true;
             // }
-            return '/home_center';
+            return '/authentication/signin';
           },
         ),
 
@@ -110,12 +111,12 @@ abstract class AcnooAppRoutes {
             //     child: SignupView(),
             //   ),
             // ),
-            // GoRoute(
-            //   path: 'signin',
-            //   pageBuilder: (context, state) => const NoTransitionPage(
-            //     child: SigninView(),
-            //   ),
-            // ),
+            GoRoute(
+              path: 'signin',
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: SignInScreen(),
+              ),
+            ),
           ],
         ),
         GoRoute(
@@ -146,6 +147,12 @@ abstract class AcnooAppRoutes {
           path: '/create_quiz',
           pageBuilder: (context, state) => const NoTransitionPage(
             child: CreateQuizScreen(),
+          ),
+        ),
+        GoRoute(
+          path: '/edit_profile',
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: EditProfileScreen(),
           ),
         ),
       ],

@@ -20,28 +20,73 @@ enum LevelStar {
   excellent,
 }
 
-class LevelItem {
+class LevelApiItem {
   final int number;
   final String title;
-  final double x;
-  final double y;
-  final double size;
   final LevelButtonShape shape;
   final LevelStatus status;
   final LevelStar levelStar;
   final bool showLock;
 
-  const LevelItem({
+  const LevelApiItem({
     required this.number,
     required this.title,
-    required this.x,
-    required this.y,
-    this.size = 48,
     this.shape = LevelButtonShape.circle,
     this.status = LevelStatus.unlocked,
     this.levelStar = LevelStar.none,
     this.showLock = false,
   });
+
+  factory LevelApiItem.fromJson(Map<String, dynamic> json) {
+    return LevelApiItem(
+      number: (json['number'] as num?)?.toInt() ?? 0,
+      title: json['title']?.toString() ?? '',
+      shape: _parseShape(json['shape']),
+      status: _parseStatus(json['status']),
+      levelStar: _parseStar(json['levelStar']),
+      showLock: json['showLock'] == true,
+    );
+  }
+
+  static LevelButtonShape _parseShape(dynamic value) {
+    switch (value?.toString()) {
+      case 'roundedSquare':
+        return LevelButtonShape.roundedSquare;
+      case 'pill':
+        return LevelButtonShape.pill;
+      case 'circle':
+      default:
+        return LevelButtonShape.circle;
+    }
+  }
+
+  static LevelStatus _parseStatus(dynamic value) {
+    switch (value?.toString()) {
+      case 'locked':
+        return LevelStatus.locked;
+      case 'completed':
+        return LevelStatus.completed;
+      case 'special':
+        return LevelStatus.special;
+      case 'unlocked':
+      default:
+        return LevelStatus.unlocked;
+    }
+  }
+
+  static LevelStar _parseStar(dynamic value) {
+    switch (value?.toString()) {
+      case 'good':
+        return LevelStar.good;
+      case 'great':
+        return LevelStar.great;
+      case 'excellent':
+        return LevelStar.excellent;
+      case 'none':
+      default:
+        return LevelStar.none;
+    }
+  }
 }
 
 extension LevelStarX on LevelStar {
@@ -85,4 +130,28 @@ extension LevelStatusX on LevelStatus {
         return const Color(0xFFD4A92E);
     }
   }
+}
+
+class LevelItem {
+  final int number;
+  final String title;
+  final double x;
+  final double y;
+  final double size;
+  final LevelButtonShape shape;
+  final LevelStatus status;
+  final LevelStar levelStar;
+  final bool showLock;
+
+  const LevelItem({
+    required this.number,
+    required this.title,
+    required this.x,
+    required this.y,
+    this.size = 48,
+    this.shape = LevelButtonShape.circle,
+    this.status = LevelStatus.unlocked,
+    this.levelStar = LevelStar.none,
+    this.showLock = false,
+  });
 }

@@ -10,48 +10,13 @@ class LeaderboardUser {
     required this.rank,
     required this.avatar,
   });
+
+  factory LeaderboardUser.fromJson(Map<String, dynamic> json) {
+    return LeaderboardUser(
+      name: json['name']?.toString() ?? '',
+      score: (json['score'] as num?)?.toInt() ?? 0,
+      rank: (json['rank'] as num?)?.toInt() ?? 0,
+      avatar: json['avatar']?.toString() ?? 'https://i.pinimg.com/736x/ea/52/41/ea524105940b91b96d70ff5216424463.jpg',
+    );
+  }
 }
-const List<LeaderboardUser> listboardusers = [
-  LeaderboardUser(
-    name: 'Rosy',
-    score: 1299,
-    rank: 1,
-    avatar: 'https://i.pinimg.com/474x/52/aa/9a/52aa9a7dcf0b72fd435ce6cd526981a1.jpg',
-  ),
-  LeaderboardUser(
-    name: 'Sabbi',
-    score: 1183,
-    rank: 2,
-    avatar: 'https://i.pinimg.com/474x/52/aa/9a/52aa9a7dcf0b72fd435ce6cd526981a1.jpg',
-  ),
-  LeaderboardUser(
-    name: 'Rhe',
-    score: 1106,
-    rank: 3,
-    avatar: 'https://i.pinimg.com/474x/52/aa/9a/52aa9a7dcf0b72fd435ce6cd526981a1.jpg',
-  ),
-  LeaderboardUser(
-    name: 'Jackie',
-    score: 1080,
-    rank: 4,
-    avatar: 'https://i.pinimg.com/474x/52/aa/9a/52aa9a7dcf0b72fd435ce6cd526981a1.jpg',
-  ),
-  LeaderboardUser(
-    name: 'Anna',
-    score: 1077,
-    rank: 5,
-    avatar: 'https://i.pinimg.com/474x/52/aa/9a/52aa9a7dcf0b72fd435ce6cd526981a1.jpg',
-  ),
-  LeaderboardUser(
-    name: 'Tommy',
-    score: 993,
-    rank: 6,
-    avatar: 'https://i.pinimg.com/474x/52/aa/9a/52aa9a7dcf0b72fd435ce6cd526981a1.jpg',
-  ),
-  LeaderboardUser(
-    name: 'Michael',
-    score: 864,
-    rank: 7,
-    avatar: 'https://i.pinimg.com/474x/52/aa/9a/52aa9a7dcf0b72fd435ce6cd526981a1.jpg',
-  ),
-];
