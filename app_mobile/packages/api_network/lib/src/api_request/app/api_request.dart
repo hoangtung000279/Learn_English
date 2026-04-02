@@ -9,6 +9,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 
 class ApiRequest {
+
   static Future<http.Response> get({
     required String url,
     Map<String, String>? headers,
@@ -17,10 +18,22 @@ class ApiRequest {
     GroupMiddleware? groupMiddleWare,
   }) async {
     Uri uri = Uri.parse(url);
+
+    if (queryParam != null && queryParam.isNotEmpty) {
+      uri = uri.replace(
+        queryParameters: {
+          ...uri.queryParameters,
+          ...queryParam,
+        },
+      );
+    }
+
     Map<String, String> headerMap = {
-      ...headers ?? {},
+      ...?headers,
     };
+
     final response = await http.get(uri, headers: headerMap);
+
     return ApiResponse.check(
       response,
       middleware: middleware,

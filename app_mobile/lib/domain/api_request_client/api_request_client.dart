@@ -14,12 +14,13 @@ class ApiRequestClient {
     String? body,
     bool needAuth = true
   }) {
-    final _header = needAuth ? _authHeaer : _commonHeader;
+    final header = needAuth ? _authHeaer : _commonHeader;
+
     return ApiRequest.post(
-      url: url, 
-      body: body, 
-      middleware: _checkAuth, 
-      headers: _header
+      url: url,
+      body: body,
+      middleware: needAuth ? _checkAuth : null,
+      headers: header,
     );
   }
  
@@ -28,12 +29,13 @@ class ApiRequestClient {
     Map<String, String>? queryParam,
     bool needAuth = true
   }) {
-    final _header = needAuth ? _authHeaer : _commonHeader;
+    final header = needAuth ? _authHeaer : _commonHeader;
+
     return ApiRequest.get(
-      url: url, 
-      queryParam: queryParam, 
-      middleware: _checkAuth, 
-      headers: _header
+      url: url,
+      queryParam: queryParam,
+      middleware: needAuth ? _checkAuth : null,
+      headers: header,
     );
   }
 
